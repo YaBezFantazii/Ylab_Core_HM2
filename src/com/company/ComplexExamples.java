@@ -205,14 +205,18 @@ public class ComplexExamples {
 
     // Функция поиска 2 чисел, которые в сумме дают sum (Task2)
     public static String[] findSum (int[] a, int sum) {
-        for (int i=0; i<a.length;i++){
-            for (int j=i+1; j<a.length;j++){
-                if (a[i]+a[j]==sum){
-                    return new String[]{ Integer.toString( a[i] ) , Integer.toString( a[j] ) };
+        if (a!=null){
+            for (int i=0; i<a.length;i++){
+                for (int j=i+1; j<a.length;j++){
+                    if (a[i]+a[j]==sum){
+                        return new String[]{ Integer.toString( a[i] ) , Integer.toString( a[j] ) };
+                    }
                 }
             }
-        }
         return new String[]{"Нет подходящих пар чисел"};
+        } else {
+            return new String[]{"Массив чисел null"};
+        }
     }
 
     // Функция нечеткого поиска (Task3)
