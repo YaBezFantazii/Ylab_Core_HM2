@@ -126,10 +126,10 @@ public class ComplexExamples {
         // Вариант через фильтр null (отбрасывает объекты, где Person.name == null)
         Map<String,Long> persons = Arrays.stream(RAW_DATA)
                 .filter(person -> person.getName()!=null)
+                .sorted(Comparator.comparingInt(Person::getId))
                 .toList()
                 .stream()
                 .distinct()
-                .sorted(Comparator.comparingInt(Person::getId))
                 .collect(Collectors.groupingBy(Person::getName,Collectors.counting()));
 
         for (Map.Entry<String,Long> t : persons.entrySet()){
@@ -149,6 +149,7 @@ public class ComplexExamples {
                 }
                     return s;
                 })
+                .sorted(Comparator.comparingInt(Person::getId))
                 .toList();
 
         Map<String,Long> persons2 = listPerson
