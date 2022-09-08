@@ -17,5 +17,8 @@ class Task3Test {
         assertEquals(false,ComplexExamples.fuzzySearch("", "gfd"));
         assertEquals(false,ComplexExamples.fuzzySearch("fdsvc##", ""));
         assertEquals(false,ComplexExamples.fuzzySearch("", ""));
+        assertEquals(false,ComplexExamples.fuzzySearch(null, null));
+        assertEquals(false,ComplexExamples.fuzzySearch("ntedsfdc", null));
+        assertEquals(false,ComplexExamples.fuzzySearch(null, "nfdsfvull"));
     }
 }

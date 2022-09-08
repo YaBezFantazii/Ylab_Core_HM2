@@ -8,8 +8,8 @@ import static java.util.stream.Collectors.groupingBy;
 public class ComplexExamples {
 
     static class Person {
-        final int id;
 
+        final int id;
         final String name;
 
         Person(int id, String name) {
@@ -51,6 +51,10 @@ public class ComplexExamples {
             new Person(6, "Amelia"),
             new Person(7, "Amelia"),
             new Person(8, "Amelia"),
+
+//            new Person(9, null ),
+//            new Person(9, null ),
+//            new Person(10, null),
     };
 
         /*  Raw data:
@@ -117,10 +121,11 @@ public class ComplexExamples {
          */
 
         System.out.println("\n********************************************************************************");
-        System.out.println("Task1:\n");
+        System.out.println("Task1 (Через фильтр):\n");
 
-
+        // Вариант через фильтр null (отбрасывает объекты, где Person.name == null)
         Map<String,Long> persons = Arrays.stream(RAW_DATA)
+                .filter(person -> person.getName()!=null)
                 .toList()
                 .stream()
                 .distinct()
@@ -130,6 +135,30 @@ public class ComplexExamples {
         for (Map.Entry<String,Long> t : persons.entrySet()){
             System.out.println("Key: "+t.getKey()+"\n"+
                                "Value:"+t.getValue());
+        }
+
+        System.out.println("\nTask1 (Через замену):\n");
+
+        // Вариант через замену null на текст (String) "null"
+        List<Person> listPerson = Arrays.stream(RAW_DATA)
+                .map(s -> {
+                    if (s.getName()==null){
+                   // Создаю новый объект (а не через сеттер),
+                   // так как объекты класса Person неизменяемые, сам класс решил не менять
+                   s = new Person(s.getId(), s.getName()+"");
+                }
+                    return s;
+                })
+                .toList();
+
+        Map<String,Long> persons2 = listPerson
+                .stream()
+                .distinct()
+                .collect(Collectors.groupingBy(Person::getName,Collectors.counting()));
+
+        for (Map.Entry<String,Long> t : persons2.entrySet()){
+            System.out.println("Key: "+t.getKey()+"\n"+
+                    "Value:"+t.getValue());
         }
 
         /*
@@ -187,17 +216,22 @@ public class ComplexExamples {
 
     // Функция нечеткого поиска (Task3)
     public static boolean fuzzySearch (String part, String full){
-        char[] a = part.toCharArray();
-        char[] b = full.toCharArray();
-        int i=0;
-        for (char symbol : b){
-            if (a.length>0 && a[i]==symbol) {
-                i++;
-                if (i>=a.length){return true;}
+        if (part!=null && full!=null){
+            char[] a = part.toCharArray();
+            char[] b = full.toCharArray();
+            int i=0;
+            for (char symbol : b){
+                if (a.length>0 && a[i]==symbol) {
+                    i++;
+                    if (i>=a.length){return true;}
+                }
             }
+            return false;
+    }   else {
+            return false;
         }
-        return false;
     }
+
 
 }
 
