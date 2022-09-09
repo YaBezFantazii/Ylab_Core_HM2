@@ -169,7 +169,7 @@ public class ComplexExamples {
         int sum = 10;
         int[] arr = new int[]{3, 4, 2, 7};
 
-        System.out.println(Arrays.stream(findSum(arr,sum)).toList());
+        System.out.println(Arrays.toString(findSum(arr,sum)));
 
         /*
         Task3
