@@ -126,16 +126,13 @@ public class ComplexExamples {
         // Вариант через фильтр null (отбрасывает объекты, где Person.name == null)
         Map<String,Long> persons = Arrays.stream(RAW_DATA)
                 .filter(person -> person.getName()!=null)
-                .sorted(Comparator.comparingInt(Person::getId))
                 .toList()
                 .stream()
                 .distinct()
                 .collect(Collectors.groupingBy(Person::getName,Collectors.counting()));
 
-        for (Map.Entry<String,Long> t : persons.entrySet()){
-            System.out.println("Key: "+t.getKey()+"\n"+
-                               "Value:"+t.getValue());
-        }
+        persons.entrySet().stream().forEach(s -> System.out.println("Key: "+s.getKey()+"\n"+
+                                                                    "Value:"+s.getValue()));
 
         System.out.println("\nTask1 (Через замену):\n");
 
@@ -149,7 +146,6 @@ public class ComplexExamples {
                 }
                     return s;
                 })
-                .sorted(Comparator.comparingInt(Person::getId))
                 .toList();
 
         Map<String,Long> persons2 = listPerson
@@ -157,10 +153,8 @@ public class ComplexExamples {
                 .distinct()
                 .collect(Collectors.groupingBy(Person::getName,Collectors.counting()));
 
-        for (Map.Entry<String,Long> t : persons2.entrySet()){
-            System.out.println("Key: "+t.getKey()+"\n"+
-                    "Value:"+t.getValue());
-        }
+        persons2.entrySet().stream().forEach(s -> System.out.println("Key: "+s.getKey()+"\n"+
+                                                                    "Value:"+s.getValue()));
 
         /*
         Task2
@@ -175,9 +169,7 @@ public class ComplexExamples {
         int sum = 10;
         int[] arr = new int[]{3, 4, 2, 7};
 
-        List<String> numbers = Arrays.stream(findSum(arr,sum))
-                .collect(Collectors.toList());
-        System.out.println(numbers);
+        System.out.println(Arrays.stream(findSum(arr,sum)).toList());
 
         /*
         Task3
@@ -203,21 +195,28 @@ public class ComplexExamples {
 
     }
 
-    // Функция поиска 2 чисел, которые в сумме дают sum (Task2)
-    public static String[] findSum (int[] a, int sum) {
-        if (a!=null){
-            for (int i=0; i<a.length;i++){
-                for (int j=i+1; j<a.length;j++){
-                    if (a[i]+a[j]==sum){
-                        return new String[]{ Integer.toString( a[i] ) , Integer.toString( a[j] ) };
-                    }
+
+// Функция поиска 2 чисел, которые в сумме дают sum (Task2)
+    public static String[] findSum(int[] a, int sum)
+    {
+        if (a!=null) {
+            Map<Integer, Integer> mapFind = new HashMap<>();
+            for (int i = 0; i < a.length; i++) {
+                // Проверяем, записывали ли мы в предыдущие итерации цикла target-nums[i] в мапу.
+                // Если да, то значит, что в мапе (а значит и в int[] a) есть пара значений
+                // "target-nums[i]" (ранее) и "nums[i]" (нынешняя итерация),
+                // которые в сумме дадут ( target-nums[i] )+( nums[i] )=target
+                if (mapFind.containsKey(sum - a[i])) {
+                    return new String[]{Integer.toString(sum - a[i]), Integer.toString(a[i])};
                 }
+                // сохраняем текущий элемент в мапу
+                mapFind.put(a[i], i);
             }
-        return new String[]{"Нет подходящих пар чисел"};
-        } else {
-            return new String[]{"Массив чисел null"};
+            return new String[]{"Нет подходящих пар чисел"};
         }
+        return new String[]{"Массив чисел null"};
     }
+
 
     // Функция нечеткого поиска (Task3)
     public static boolean fuzzySearch (String part, String full){

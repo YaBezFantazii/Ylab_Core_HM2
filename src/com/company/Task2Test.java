@@ -29,5 +29,6 @@ class Task2Test {
         assertArrayEquals(new String[]{"Нет подходящих пар чисел"}, ComplexExamples.findSum(test5,itog5));
         assertArrayEquals(new String[]{"Массив чисел null"}, ComplexExamples.findSum(test6,itog6));
 
+
     }
 }
